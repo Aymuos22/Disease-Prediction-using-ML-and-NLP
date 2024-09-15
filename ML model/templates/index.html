@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Disease Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        header, footer { background-color: #333; color: #fff; text-align: center; padding: 15px 0; }
+        header { position: sticky; top: 0; z-index: 1000; }
+        footer { position: fixed; bottom: 0; width: 100%; }
+        .container { padding: 60px 50px; margin-bottom: 60px; }
+        h1 { color: #333; margin-bottom: 20px; }
+        form { margin-top: 20px; }
+        select { margin: 5px 0 15px 0; width: 300px; padding: 10px; }
+        input[type="submit"], button { padding: 10px 15px; margin-top: 10px; background-color: #28a745; color: #fff; border: none; cursor: pointer; border-radius: 5px; }
+        h2 { color: #007bff; }
+        .symptom-list { margin-bottom: 20px; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 5px 0; }
+        .content { background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Disease Prediction System</h2>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <h1>Disease Prediction Based on Symptoms</h1>
+
+            <form id="addSymptomForm" action="/add_symptom" method="post">
+                <div class="symptom-list">
+                    <label for="symptom">Select Symptom:</label>
+                    <select id="symptom" name="symptom">
+                        {% for symptom in symptoms %}
+                            <option value="{{ symptom }}">{{ symptom.replace('_', ' ').capitalize() }}</option>
+                        {% endfor %}
+                    </select>
+                    {% for symptom in selected_symptoms %}
+                        <input type="hidden" name="selected_symptoms" value="{{ symptom }}">
+                    {% endfor %}
+                    <button type="submit">Add Symptom</button>
+                </div>
+            </form>
+
+            {% if selected_symptoms %}
+                <h2>Selected Symptoms:</h2>
+                <ul>
+                    {% for symptom in selected_symptoms %}
+                        <li>{{ symptom.replace('_', ' ').capitalize() }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <form action="/predict" method="post">
+                {% for symptom in selected_symptoms %}
+                    <input type="hidden" name="selected_symptoms" value="{{ symptom }}">
+                {% endfor %}
+                <input type="submit" value="Predict">
+            </form>
+
+            {% if prediction_text %}
+                <h2>{{ prediction_text }}</h2>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Disease Prediction System. All rights reserved.</p>
+    </footer>
+</body>
+</html>
