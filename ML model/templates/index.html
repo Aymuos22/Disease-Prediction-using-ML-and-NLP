@@ -2,72 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Disease Prediction</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header, footer { background-color: #333; color: #fff; text-align: center; padding: 15px 0; }
-        header { position: sticky; top: 0; z-index: 1000; }
-        footer { position: fixed; bottom: 0; width: 100%; }
-        .container { padding: 60px 50px; margin-bottom: 60px; }
-        h1 { color: #333; margin-bottom: 20px; }
-        form { margin-top: 20px; }
-        select { margin: 5px 0 15px 0; width: 300px; padding: 10px; }
-        input[type="submit"], button { padding: 10px 15px; margin-top: 10px; background-color: #28a745; color: #fff; border: none; cursor: pointer; border-radius: 5px; }
-        h2 { color: #007bff; }
-        .symptom-list { margin-bottom: 20px; }
-        ul { list-style-type: none; padding: 0; }
-        li { padding: 5px 0; }
-        .content { background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <header>
-        <h2>Disease Prediction System</h2>
+    <!-- Header -->
+    <header class="bg-primary text-white text-center py-3">
+        <h1>Disease Prediction System</h1>
+        <p>Your health companion for predictive diagnosis</p>
     </header>
 
-    <div class="container">
-        <div class="content">
-            <h1>Disease Prediction Based on Symptoms</h1>
-
-            <form id="addSymptomForm" action="/add_symptom" method="post">
-                <div class="symptom-list">
-                    <label for="symptom">Select Symptom:</label>
-                    <select id="symptom" name="symptom">
-                        {% for symptom in symptoms %}
-                            <option value="{{ symptom }}">{{ symptom.replace('_', ' ').capitalize() }}</option>
-                        {% endfor %}
-                    </select>
-                    {% for symptom in selected_symptoms %}
-                        <input type="hidden" name="selected_symptoms" value="{{ symptom }}">
-                    {% endfor %}
-                    <button type="submit">Add Symptom</button>
-                </div>
-            </form>
-
-            {% if selected_symptoms %}
-                <h2>Selected Symptoms:</h2>
-                <ul>
-                    {% for symptom in selected_symptoms %}
-                        <li>{{ symptom.replace('_', ' ').capitalize() }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-            <form action="/predict" method="post">
-                {% for symptom in selected_symptoms %}
-                    <input type="hidden" name="selected_symptoms" value="{{ symptom }}">
-                {% endfor %}
-                <input type="submit" value="Predict">
-            </form>
-
-            {% if prediction_text %}
-                <h2>{{ prediction_text }}</h2>
-            {% endif %}
+    <div class="container mt-5">
+        <!-- Attractive Text and Image -->
+        <div class="text-center mb-4">
+            <h2 class="text-success">I am Doctor Bot</h2>
+            <p class="text-muted">Your AI-powered assistant for health predictions.</p>
+            <img src="static\img.jpg" alt="Doctor Bot" id="doctor-bot-image" class="img-fluid" style="max-width: 200px;">
         </div>
+
+        <!-- Form to Input Medical Condition -->
+        <form method="POST" action="/predict" class="mt-4">
+            <div class="form-group">
+                <label for="medical_condition">Describe your medical condition:</label>
+                <textarea class="form-control" id="medical_condition" name="medical_condition" rows="4" placeholder="Type your symptoms or condition here..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Predict Disease</button>
+        </form>
+
+        <!-- Display Selected Symptoms -->
+        {% if selected_symptoms %}
+        <div class="mt-4">
+            <h4>Selected Symptoms:</h4>
+            <ul>
+                {% for symptom in selected_symptoms %}
+                <li>{{ symptom }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Display Prediction Result -->
+        {% if prediction_text %}
+        <div class="mt-4 alert alert-success">
+            <h4>{{ prediction_text }}</h4>
+        </div>
+        {% endif %}
     </div>
 
-    <footer>
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto" style="position: relative; bottom: 0; width: 100%;">
         <p>&copy; 2024 Disease Prediction System. All rights reserved.</p>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
